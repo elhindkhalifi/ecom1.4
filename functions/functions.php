@@ -135,15 +135,13 @@ function updatUser($data) {
              SET ";
     foreach($data as $key=>$value) {
         if($key!="id"){
-            $query.= $key."=? , ";
-            
+            $query.= $key."=? ,";
+           // $query=trim($query,",");
+
         }
     };
-    $query=$query.",,";
     $query=trim($query,",");
-    var_dump($query);
-
-    $query=$query." where id=? ,";
+    $query=$query." where id=?";
     var_dump($query);
      If( $stmt=mysqli_prepare($conn, $query)){
     /* Lecture des marqueurs */

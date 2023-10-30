@@ -50,7 +50,7 @@ $data7=[
     "email"=> "michel@michel.ca",
     "pwd"=> "",
 ];
-//$newUser=createUser($data7);
+$newUser=createUser($data7);
 
 //update user AKA changer une ligne dans la table user
 $data8=[
