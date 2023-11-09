@@ -61,29 +61,7 @@ function showData($title,$data) {
     echo "<br> <br>";
 };
 
-/*function createUser($data) {
-    global $conn;
-    //$query="INSERT INTO 'user' ('id', 'user_name', 'email', 'pwd') VALUES (NULL,".$data['user_name']."," .$data['email'].",". $data['pwd'].") ";
-    //$result=mysqli_query($conn, $query);
-    $query="INSERT INTO user VALUES (NULL,?,?,?)";
-    If( $stmt=mysqli_prepare($conn, $query)){
-/* Lecture des marqueurs */
-/*mysqli_stmt_bind_param($stmt,"s",$data['user_name']);
-mysqli_stmt_bind_param($stmt,"s",$data['email']);
-mysqli_stmt_bind_param($stmt,"s",$data['pwd']);*/
-/* Exécution de la requête*/
-//$result= mysqli_stmt_execute($stmt);
-//var_dump($result);
-//return $result;
 
-/*lecture des variables resultantes*/
-//mysqli_stmt_bind_result($stmt,$district);
-
-/* Récupération des valeurs */
-//mysqli_start_fetch ($stmt);
-
-/*Fermeture du traitement*/
-// mysqli_stmt_close($stmt);} };
  function createUser($data) {
     global $conn;
     $query="INSERT INTO user VALUES (NULL,?,?,?)";
@@ -108,7 +86,7 @@ function updateUser($data) {
     $query= "UPDATE user
              SET user_name=?, email=?, pwd =? 
              WHERE id =?";
-    var_dump($query);
+    //var_dump($query);
      If( $stmt=mysqli_prepare($conn, $query)){
     /* Lecture des marqueurs */
     mysqli_stmt_bind_param($stmt,
@@ -125,43 +103,159 @@ function updateUser($data) {
     var_dump($result);
     return $result;
 }};
-function updatUser($data) {
+
+
+function deleteUser($id) {
     global $conn;
-    /*$query= "UPDATE user
-             SET user_name=?, email=?, pwd =? 
-             WHERE id =?";*/
-    var_dump($data);
-    $query= "UPDATE user
-             SET ";
-    foreach($data as $key=>$value) {
-        if($key!="id"){
-            $query.= $key."=? ,";
-           // $query=trim($query,",");
-
-        }
+    $query= "DELETE FROM user WHERE id = ?";
+    If( $stmt=mysqli_prepare($conn, $query)){
+        /* Lecture des marqueurs*/ 
+        mysqli_stmt_bind_param($stmt,"i",$id);
+        /* Exécution de la requête*/
+        $result= mysqli_stmt_execute($stmt);
+        echo "<br> <br>";
+        echo"coucou je suis supprimee";
+        echo "<br> <br>";
+        var_dump($result);
+        return $result;
     };
-    $query=trim($query,",");
-    $query=$query." where id=?";
-    var_dump($query);
-     If( $stmt=mysqli_prepare($conn, $query)){
-    /* Lecture des marqueurs */
-    mysqli_stmt_bind_param($stmt,
-    "sssi",
-    $data['user_name'],
-    $data['email'],
-    $data['pwd'],
-    $data['id']);
-    /* Exécution de la requête*/
-    $result= mysqli_stmt_execute($stmt);
-    echo "<br> <br>";
-    echo"coucou je suis changee";
-    echo "<br> <br>";
-    var_dump($result);
-    return $result;
-}};
+};
+
+function getUserByName(string $user_name)
+{
+    global $conn;
+
+    $query = "SELECT * FROM user WHERE user.user_name = '" . $user_name."';";
+
+    //var_dump($query);
+    $result = mysqli_query($conn, $query);
+
+        // avec fetch row : tableau indexé
+        $data = mysqli_fetch_assoc($result);
+        return $data;
+}
+function getUserByEmail(string $email)
+{
+    global $conn;
+
+    $query = "SELECT * FROM user WHERE user.email = '" . $email."';";
+
+    //var_dump($query);
+    $result = mysqli_query($conn, $query);
+
+        // avec fetch row : tableau indexé
+        $data = mysqli_fetch_assoc($result);
+        return $data;
+}
 
 
-/*function deleteUser($id) {
+function getUserByNam(string $user_name)
+{
+    global $conn;
+     $query = "SELECT * 
+                FROM user
+                WHERE user.user_name = ?;";
+
+    if ($stmt = mysqli_prepare($conn, $query)) {
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "s",
+            $user_name,
+        );
+
+        // Exécution de la requête 
+        $result= mysqli_stmt_execute($stmt);
+
+        // bind result variables 
+        mysqli_stmt_bind_result($stmt, $user_name);
+
+        // fetch value 
+        mysqli_stmt_fetch($stmt); 
+       
+        echo "<br> <br>";
+        echo"coucou j existe ";
+        echo "<br> <br>";
+        var_dump($result);
+        return $result;
+    };
+};
+        
+    
+
+
+
+
+
+
+
+
+
+/*function createUser($data) {
+    global $conn;
+    //$query="INSERT INTO 'user' ('id', 'user_name', 'email', 'pwd') VALUES (NULL,".$data['user_name']."," .$data['email'].",". $data['pwd'].") ";
+    //$result=mysqli_query($conn, $query);
+    $query="INSERT INTO user VALUES (NULL,?,?,?)";
+    If( $stmt=mysqli_prepare($conn, $query)){
+/* Lecture des marqueurs */
+/*mysqli_stmt_bind_param($stmt,"s",$data['user_name']);
+mysqli_stmt_bind_param($stmt,"s",$data['email']);
+mysqli_stmt_bind_param($stmt,"s",$data['pwd']);*/
+/* Exécution de la requête*/
+//$result= mysqli_stmt_execute($stmt);
+//var_dump($result);
+//return $result;
+
+/*lecture des variables resultantes*/
+//mysqli_stmt_bind_result($stmt,$district);
+
+/* Récupération des valeurs */
+//mysqli_start_fetch ($stmt);
+
+/*Fermeture du traitement*/
+// mysqli_stmt_close($stmt);} };
+
+
+// function updatUser($data) {
+//     global $conn;
+//     /*$query= "UPDATE user
+//              SET user_name=?, email=?, pwd =? 
+//              WHERE id =?";*/
+//     var_dump($data);
+//     $query= "UPDATE user
+//              SET ";
+//     foreach($data as $key=>$value) {
+//         if($key!="id"){
+//             $query.= $key."=? ,";
+
+//         }
+//     };
+//     $query=trim($query,",");
+//     $query=$query." where id=?";
+//     var_dump($query);
+//      If( $stmt=mysqli_prepare($conn, $query)){
+//     /* Lecture des marqueurs */
+//     $param="";
+//     foreach($data as $key=>$value) {
+//             echo "Nom de l'user :". $value["user_name"]."<br>";
+//             echo "Courriel :". $value["email"]."<br><br>";
+//             };
+//     //$param=trim($param,",");
+//     //echo $param;
+//     /*mysqli_stmt_bind_param($stmt,
+//     "ss",$param);*/
+
+//     /* Exécution de la requête*/
+//     $result= mysqli_stmt_execute($stmt);
+//     echo "<br> <br>";
+//     echo"coucou je suis changee";
+//     echo "<br> <br>";
+//     var_dump($result);
+//     return $result;
+// }};
+
+
+/*function delUser($id) {
     global $conn;
     $query= "DELETE FROM user WHERE id = $id";
     $result=mysqli_query($conn, $query);
@@ -172,19 +266,4 @@ function updatUser($data) {
         return $result;
     };
 //};*/
-/*function deleteUser($id) {
-    global $conn;
-    $query= "DELETE FROM user WHERE id = ?";
-    If( $stmt=mysqli_prepare($conn, $query)){
-        /* Lecture des marqueurs 
-        mysqli_stmt_bind_param($stmt,"i",$id);
-        /* Exécution de la requête
-        $result= mysqli_stmt_execute($stmt);
-        echo "<br> <br>";
-        echo"coucou je suis supprimee";
-        echo "<br> <br>";
-        var_dump($result);
-        return $result;
-    };
-}*/
 ?>
